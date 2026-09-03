@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keuangan Kos</title>
+</head>
+<body>
+    <h2>Catat Transaksi Baru</h2>
+    
+    <!-- Tambahkan ID pada form agar mudah ditangkap oleh JavaScript -->
+    <form id="formTransaksi">
+        <<label>Kategori:</label>
+    <select id="input-kategori" required>
+    <option value="">-- Pilih Kategori --</option>
+    <!-- Opsi kategori akan disuntikkan otomatis oleh JavaScript -->
+</select>
+        <br><br>
+
+        <label>Nominal Pengeluaran (Rp):</label>
+        <input type="number" id="inputNominal" placeholder="Contoh: 15000" required>
+        <br><br>
+
+        <label>Catatan (Opsional):</label>
+        <input type="text" id="inputCatatan" placeholder="Contoh: Beli Nescafe & madu">
+        <br><br>
+
+        <button type="submit">Simpan Transaksi</button>
+    </form>
+
+    <hr>
+    <h3>Riwayat Jajan</h3>
+<table border="1" cellpadding="8">
+    <thead>
+        <tr>
+            <th>Tanggal</th>
+            <th>Catatan</th>
+            <th>Nominal</th>
+        </tr>
+    </thead>
+    <tbody id="tabel-riwayat">
+        <!-- Data dari database akan otomatis disuntikkan ke sini -->
+    </tbody>
+</table>
+
+<script>
+    async function muatRiwayat() {
+        try {
+            // 1. Ambil data JSON dari Spring Boot
+            const respon = await fetch('http://localhost:8080/api/transaksi');
+            const daftarTransaksi = await respon.json();
+
+            // 2. Temukan wadah tabelnya
+            const wadahTabel = document.getElementById('tabel-riwayat');
+            wadahTabel.innerHTML = ''; // Bersihkan isi lama agar tidak dobel
+
+            // 3. Looping data dan cetak ke baris HTML
+            daftarTransaksi.forEach(transaksi => {
+                wadahTabel.innerHTML += `
+                    <tr>
+                        <td>${transaksi.tanggal}</td>
+                        <td>${transaksi.catatan}</td>
+                        <td>Rp ${transaksi.nominal}</td>
+                    </tr>
+                `;
+            });
+        } catch (error) {
+            console.error("Gagal menarik data dari Java:", error);
+        }
+    }
+
+    // Panggil fungsinya agar langsung jalan saat web dibuka
+    muatRiwayat();
+</script>
+
+    <script src="script.js"></script>
+</body>
+</html>
