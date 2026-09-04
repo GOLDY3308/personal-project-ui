@@ -4,74 +4,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keuangan Kos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h2>Catat Transaksi Baru</h2>
-    
-    <!-- Tambahkan ID pada form agar mudah ditangkap oleh JavaScript -->
+    <div class="container py-4">
+        <h2 class="text-primary fw-bold mb-4">Catat Transaksi Baru</h2>
+        <div class="card shadow-sm mb-5">
+            <div class="card-body">
+
+                <!-- Tampilan Sisa Saldo -->
+        <div class="card bg-success text-white shadow-sm mb-4">
+            <div class="card-body text-center">
+                <h5 class="mb-1">Sisa Jatah Bulan Ini</h5>
+                <h2 class="fw-bold mb-0" id="teks-saldo">Rp 0</h2>
+            </div>
+        </div>
+
     <form id="formTransaksi">
-        <<label>Kategori:</label>
-    <select id="input-kategori" required>
-    <option value="">-- Pilih Kategori --</option>
+        <label class="form-label">Kategori:</label>
+        <select id="input-kategori" class="from-select" required>
+        <option value="">-- Pilih Kategori --</option>
+
     <!-- Opsi kategori akan disuntikkan otomatis oleh JavaScript -->
 </select>
         <br><br>
 
         <label>Nominal Pengeluaran (Rp):</label>
-        <input type="number" id="inputNominal" placeholder="Contoh: 15000" required>
+        <input type="number" id="inputNominal" class="form-control" placeholder="Contoh: 15000" required>
         <br><br>
 
         <label>Catatan (Opsional):</label>
-        <input type="text" id="inputCatatan" placeholder="Contoh: Beli Nescafe & madu">
+        <input type="text" id="inputCatatan" class="form-control" placeholder="Contoh: Beli Nescafe & madu">
         <br><br>
 
-        <button type="submit">Simpan Transaksi</button>
+        <button type="submit" class="btn btn-primary mt-3">Simpan Transaksi</button>
     </form>
+        </div>
+            </div>
 
     <hr>
     <h3>Riwayat Jajan</h3>
-<table border="1" cellpadding="8">
-    <thead>
+<table class="table table-bordered table-hover shadow-sm">
+    <thead class="table-dark">
         <tr>
             <th>Tanggal</th>
             <th>Catatan</th>
             <th>Nominal</th>
         </tr>
-    </thead>
+    </thead >
     <tbody id="tabel-riwayat">
-        <!-- Data dari database akan otomatis disuntikkan ke sini -->
-    </tbody>
+    <!-- Data dari database akan otomatis disuntikkan ke sini -->
+</tbody>
 </table>
-
-<script>
-    async function muatRiwayat() {
-        try {
-            // 1. Ambil data JSON dari Spring Boot
-            const respon = await fetch('http://localhost:8080/api/transaksi');
-            const daftarTransaksi = await respon.json();
-
-            // 2. Temukan wadah tabelnya
-            const wadahTabel = document.getElementById('tabel-riwayat');
-            wadahTabel.innerHTML = ''; // Bersihkan isi lama agar tidak dobel
-
-            // 3. Looping data dan cetak ke baris HTML
-            daftarTransaksi.forEach(transaksi => {
-                wadahTabel.innerHTML += `
-                    <tr>
-                        <td>${transaksi.tanggal}</td>
-                        <td>${transaksi.catatan}</td>
-                        <td>Rp ${transaksi.nominal}</td>
-                    </tr>
-                `;
-            });
-        } catch (error) {
-            console.error("Gagal menarik data dari Java:", error);
-        }
-    }
-
-    // Panggil fungsinya agar langsung jalan saat web dibuka
-    muatRiwayat();
-</script>
 
     <script src="script.js"></script>
 </body>
